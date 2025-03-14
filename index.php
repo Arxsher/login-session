@@ -1,11 +1,13 @@
 <?php
 session_start();
+
+include("config.php");
+
 if (isset($_SESSION['username'])) {
     header("Location: dashboard.php");
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,7 +26,6 @@ if (isset($_SESSION['username'])) {
     </div>
     <form action="auth/login.php" method="POST">
       <?php
-        session_start();
         if (isset($_SESSION['error'])) {
           echo '<p style="color: red; text-align: center; margin-bottom: 10px;">' . $_SESSION['error'] . '</p>';
           unset($_SESSION['error']);

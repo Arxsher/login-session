@@ -1,40 +1,29 @@
 <?php
 session_start();
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $password = "";
-    $error = "";
+include("../config.php");
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = htmlspecialchars(trim($_POST["email"]));
     $password = htmlspecialchars(trim($_POST["password"]));
 
-    $users = [
-        [
-            'email' => 'user@example.com',
-            'password' => '123456',
-            'username' => 'othman'
-        ],
-        [
-            'email' => 'alice@example.com',
-            'password' => 'alice123',
-            'username' => 'alice'
-        ]
-    ];
+    $login_query = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($login_query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $authenticated = false;
-    foreach ($users as $user) {
-        if ($user['email'] === $email && $user['password'] === $password) {
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
             $_SESSION["email"] = $email;
             $_SESSION["username"] = $user['username'];
-            $authenticated = true;
             header("Location: ../dashboard.php");
             exit();
         }
     }
 
-    if (!$authenticated) {
-        $_SESSION['error'] = "Invalid email or password";
-        header("Location: ../index.php");
-        exit();
-    }
+    $_SESSION['error'] = "Invalid email or password";
+    header("Location: ../index.php");
+    exit();
 }
 ?>

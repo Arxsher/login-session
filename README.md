@@ -4,64 +4,75 @@
 This project provides a simple login session system using PHP. It includes user authentication, signup, login, and logout functionalities with basic styling.
 
 ## Features
-- User registration and login
-- Session management
-- Dashboard page
-- Styled using CSS
+- User Authentication:
+   - Secure registration.
+   - password hashing.
+   - session-based authentication, and logout.
+- Database Integration:
+   - MySQL connection.
+   - prepared statements.
+   - user data persistence.
+   - email validation.
+- Security:
+   - Password hashing.
+   - SQL injection prevention.
+   - XSS prevention.
+   - input sanitization.
+   - secure sessions.
+- UI/UX:
+   - Responsive design.
+   - dark/light theme switching.
+
 
 ## Installation
 1. Clone the repository:
    ```sh
-   git clone <repository_url>
+   git clone https://github.com/Arxsher/login-session.git
    ```
-2. Navigate to the project directory:
-   ```sh
-   cd LoginSession
+2. Set up your MySQL database and import the schema:
+   ```sql
+   CREATE TABLE users (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       username VARCHAR(255),
+       email VARCHAR(255) UNIQUE,
+       password VARCHAR(255)
+   );
    ```
-3. Start a local PHP server:
-   ```sh
-   php -S localhost:8000
-   ```
-4. Open your browser and go to:
-   ```
-   http://localhost:8000/index.php
-   ```
+3. Configure your database connection in `config.php`
+4. Start your local server
+5. Access the application through your web browser
 
 ## File Structure
 ```
 LoginSession/
-│-- index.php               # Main entry point
-│-- dashboard.php           # User dashboard
+│-- index.php                    # Login page
+│-- dashboard.php                # User dashboard with theme switching
+│-- config.php                   # Database configuration
 │-- auth/
-│   ├── SignUp.php          # User registration
-│   ├── login.php           # Login functionality
-│   ├── logout.php          # Logout functionality
+│ ├── SignUp.php                 # User registration page
+│ ├── login.php                  # Login processing
+│ ├── process_signup.php         # Registration processing
+│ ├── logout.php                 # Logout handling
 │-- styles/
-│   ├── styles.css          # Main styles
-│   ├── dashboard.css       # Dashboard styles
-│   ├── assets/
-│       ├── image.png       # Image asset
+│ ├── styles.css                 # Main styles
+│ ├── dashboard.css              # Dashboard specific styles
 ```
 
 ## Technologies Used
 - PHP
+- MySQL
 - HTML5
 - CSS3
 - JavaScript
 - Font Awesome Icons
 
-## Demo User Accounts
-For testing purposes, you can use the following demo user accounts:
+## Theme System
+The application includes a theme switching system that:
+- Toggles between dark and light modes
+- Persists user preference using cookies
+- Maintains theme across sessions
+- Provides smooth visual transitions
 
-### User 1
-- **Email:** user@example.com
-- **Password:** 123456
-- **Username:** othman
-
-### User 2
-- **Email:** alice@example.com
-- **Password:** alice123
-- **Username:** alice
 
 ## License
 This project is open-source and available under the MIT License.

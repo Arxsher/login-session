@@ -14,7 +14,14 @@
       <h1>Create your account</h1>
       <p>Already have an account? <a href="../index.php" class="text-white">Sign in</a></p>
     </div>
-    <form action="../index.php">
+    <?php
+      session_start();
+      if (isset($_SESSION['error'])) {
+        echo '<p style="color: red; text-align: center; margin-top: 20px;">' . $_SESSION['error'] . '</p>';
+        unset($_SESSION['error']);
+      }
+    ?>
+    <form action="process_signup.php" method="POST">
       <input type="text" name="fullname" placeholder="Full name" required />
 
       <input type="email" name="email" placeholder="Your email" required />

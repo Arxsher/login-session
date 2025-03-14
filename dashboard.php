@@ -1,7 +1,10 @@
 <?php
 session_start();
 
-if (isset($_GET['logout'])) {~
+$username = $_SESSION['username'];
+
+if (isset($_GET['logout'])) {
+    setcookie($username, "", time() - 3600, "/");
     session_destroy();
     header("Location: index.php");
     exit();
@@ -11,19 +14,11 @@ if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
-
 $username = $_SESSION['username'];
 
 if (isset($_GET['mode'])) {
     $mode = $_GET['mode'];
-    setcookie(
-        $username, 
-        $mode, 
-        time() + (86400 * 365), 
-        "/", 
-        "localhost", 
-        false, 
-        true);
+    setcookie($username, $mode, time() + (86400 * 365), "/");
     header("Location: dashboard.php");
     exit();
 }
@@ -45,6 +40,36 @@ if (isset($_COOKIE[$username])) {
     <link rel="stylesheet" href="./styles/styles.css" />
     <link rel="stylesheet" href="./styles/dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .navbar {
+            background: rgba(5, 5, 6, 0.494);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        <?php if ($mode === 'light'): ?>.dashboard-body {
+            background-color: rgb(87, 0, 0);
+            color: #000000;
+        }
+
+        main {
+            color: white;
+        }
+
+        <?php endif; ?>
+    </style>
     <style>
         .navbar {
             background: rgba(5, 5, 6, 0.494);
@@ -98,8 +123,9 @@ if (isset($_COOKIE[$username])) {
                     <a href="#"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-cog"></i> Settings</a>
                     <a href="./auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    <a href="?mode=<?php echo $mode === 'dark' ? 'light' : 'dark'; ?>">
-                        <i class="fas fa-adjust"></i><?php echo $mode === 'dark' ? 'Light' : 'Dark'; ?> Mode
+                    <a href="?mode=<?php echo ($mode === 'dark' ? 'light' : 'dark'); ?>">
+                        <i class="fas fa-<?php echo ($mode === 'dark' ? 'sun' : 'moon'); ?>"></i>
+                        <?php echo ($mode === 'dark' ? 'Light' : 'Dark'); ?> Mode
                     </a>
                 </div>
             </div>
@@ -195,6 +221,7 @@ if (isset($_COOKIE[$username])) {
         document.addEventListener('DOMContentLoaded', function() {
             const profileMenu = document.querySelector('.profile-menu');
             const dropdownContent = document.querySelector('.dropdown-content');
+
 
             profileMenu.addEventListener('click', function(e) {
                 e.stopPropagation();
